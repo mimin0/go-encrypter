@@ -11,9 +11,9 @@ import (
 )
 
 func main() {
-	originalText := flag.String("password", "problems.csv", "plane text password that should be encrypted")
+	originalText := flag.String("password", "dafault_value", "plane text password that should be encrypted")
 	flag.Parse()
-	fmt.Println(originalText)
+	fmt.Println(*originalText)
 
 	key := []byte("example key 123411111111")
 
