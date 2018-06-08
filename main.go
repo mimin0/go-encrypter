@@ -5,18 +5,20 @@ import (
 	"crypto/cipher"
 	"crypto/rand"
 	"encoding/base64"
+	"flag"
 	"fmt"
 	"io"
 )
 
 func main() {
-	originalText := "secretText"
+	originalText := flag.String("password", "problems.csv", "plane text password that should be encrypted")
+	flag.Parse()
 	fmt.Println(originalText)
 
 	key := []byte("example key 123411111111")
 
 	// encrypt value to base64
-	cryptoText := encrypt(key, originalText)
+	cryptoText := encrypt(key, *originalText)
 	fmt.Println(cryptoText)
 
 	// encrypt base64 crypto to original value
