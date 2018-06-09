@@ -10,20 +10,44 @@ import (
 	"io"
 )
 
+type stringFlag struct {
+	set   bool
+	value string
+}
+
+func (sf *stringFlag) Set(x string) error {
+	sf.value = x
+	sf.set = true
+	return nil
+}
+
+func (sf *stringFlag) String() string {
+	return sf.value
+}
+
+var encryptText stringFlag
+var decryptText stringFlag
+
+func init() {
+	flag.Var(&encryptText, "encrypt", "-encrypt='plane_text_password'")
+	flag.Var(&decryptText, "decrypt", ", -decrypt='encrypted_password'")
+}
+
 func main() {
-	originalText := flag.String("password", "dafault_value", "plane text password that should be encrypted")
+	key := []byte("example key 1234")
+
 	flag.Parse()
-	fmt.Println(*originalText)
-
-	key := []byte("example key 123411111111")
-
-	// encrypt value to base64
-	cryptoText := encrypt(key, *originalText)
-	fmt.Println(cryptoText)
-
-	// encrypt base64 crypto to original value
-	text := decrypt(key, cryptoText)
-	fmt.Printf(text)
+	if encryptText.set {
+		fmt.Println("--encryption--")
+		// encrypt value to base64
+		cryptoText := encrypt(key, encryptText.value)
+		fmt.Println(cryptoText)
+	} else {
+		fmt.Printf("--decryption--\n")
+		// encrypt base64 crypto to original value
+		text := decrypt(key, decryptText.value)
+		fmt.Printf(text)
+	}
 }
 
 // encrypt string to base64 crypto using AES
